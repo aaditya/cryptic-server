@@ -3,12 +3,11 @@ const passport = require('passport');
 
 const User = require('../../models/user');
 
-const loginUser = async (err, req, res, next) => {
+const loginUser = async (req, res, next) => {
     try {
-        if (err) { throw err; }
-
         let payload = { userId: req.user._id, access: req.user.access === "user" ? 10 : 0 };
         let token = jwt.sign(payload, process.env.SECRET_KEY);
+        
         res.status(200).json({
             "message": "Authenticated",
             "data": token
@@ -42,7 +41,7 @@ const loginHandler = function (req, res, next) {
             if (err) {
                 return next(err);
             }
-            return loginUser(null, req, res, next);
+            return loginUser(req, res, next);
         });
     })(req, res, next);
 }

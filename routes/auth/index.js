@@ -12,6 +12,8 @@ router.post('/login', require('./login'));
 
 router.post('/register', require('./register'));
 
+router.post('/resend', require('./resend'));
+
 router.get('/verify', require('./verify'));
 
 module.exports = router;

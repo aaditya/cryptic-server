@@ -4,6 +4,7 @@ const { Schema, model } = require('mongoose');
  * User Status Guide
  * 0 -> Unverified / Pending
  * 1 -> Verified
+ * 2 -> Password Forgotten
  * -1 -> Banned
  */
 

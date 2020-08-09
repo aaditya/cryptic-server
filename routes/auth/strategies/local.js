@@ -12,7 +12,7 @@ module.exports = new LocalStrategy(
     async function (username, password, done) {
         try {
             const user = await User.findOne({ email: username });
-            if (!user || user.status !== 1) {
+            if (!user || user.status < 1) {
                 return done(null, false);
             }
             

@@ -1,5 +1,6 @@
 const express = require('express');
 const bp = require('body-parser');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const passport = require('passport');
@@ -13,6 +14,8 @@ app.use(bp.urlencoded({ extended: false, limit: "50mb" }));
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(cors());
 
 app.use(useragent.express());
 
