@@ -1,6 +1,11 @@
 const bcrypt = require('bcrypt');
+const path = require('path');
 
 const User = require('../../models/user');
+
+const randStr = require('../common/rand');
+const renderHTML = require('../common/renderHTML');
+const { sendHTMLEMail } = require('../common/email');
 
 const registerUser = async (req, res, next) => {
     try {
@@ -19,19 +24,29 @@ const registerUser = async (req, res, next) => {
         }
 
         const pwdh = await bcrypt.hash(req.body.pwd, 10);
-        await new User({
+        const activeKey = randStr({ limit: 11, special: false });
+
+        const saveData = await new User({
             name,
             email,
             school,
-            pwd: pwdh
+            pwd: pwdh,
+            activation: {
+                key: activeKey
+            }
         }).save();
 
-        return res.status(200).json({
+        let activeUrl = `${req.protocol}://${req.get('host')}/activate?uid=${saveData._id}&active=${activeKey}`;
+
+        res.status(200).json({
             "message": "Registration completed."
         });
+
+        const html = await renderHTML(path.join(__dirname, '../../templates/verification.ejs'), { url: activeUrl });
+        await sendHTMLEMail(email, 'Verify your Email Address to access Cryptix', html).catch();
     } catch (err) {
         next(err);
     }
 }
 
-module.exports.local = registerUser;
+module.exports = registerUser;

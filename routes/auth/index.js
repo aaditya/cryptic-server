@@ -8,8 +8,10 @@ passport.use(require('./strategies/local'));
 passport.serializeUser(function (user, done) { done(null, user); });
 passport.deserializeUser(function (user, done) { done(null, user); });
 
-router.post('/login', passport.authenticate('local'), require('./login'));
+router.post('/login', require('./login'));
 
-router.post('/register', require('./register').local);
+router.post('/register', require('./register'));
+
+router.get('/verify', require('./verify'));
 
 module.exports = router;

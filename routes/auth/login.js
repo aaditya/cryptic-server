@@ -1,11 +1,14 @@
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
 
 const User = require('../../models/user');
 
-const loginUser = async (req, res, next) => {
+const loginUser = async (err, req, res, next) => {
     try {
+        if (err) { throw err; }
+
         let payload = { userId: req.user._id, access: req.user.access === "user" ? 10 : 0 };
-        let token = jwt.sign(payload, 'verySecret');
+        let token = jwt.sign(payload, process.env.SECRET_KEY);
         res.status(200).json({
             "message": "Authenticated",
             "data": token
@@ -25,4 +28,23 @@ const loginUser = async (req, res, next) => {
     }
 }
 
-module.exports = loginUser;
+const loginHandler = function (req, res, next) {
+    passport.authenticate('local', function (err, user, info) {
+        if (err) {
+            return next(err);
+        }
+        
+        if (!user) {
+            return res.status(401).json({ "message": "Authentication Failed" });
+        }
+
+        req.logIn(user, function (err) {
+            if (err) {
+                return next(err);
+            }
+            return loginUser(null, req, res, next);
+        });
+    })(req, res, next);
+}
+
+module.exports = loginHandler;
