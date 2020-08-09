@@ -9,4 +9,7 @@ router.get('/status', (req, res) => {
     })
 });
 
+// Authentication APIs
+router.use('/auth', require('./auth'));
+
 module.exports = router;
