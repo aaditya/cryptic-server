@@ -5,6 +5,11 @@ const questionModel = new Schema({
     total: Number,
     questions: [{
         text: String,
+        qType: {
+            type: String,
+            enum: ["image", "text"],
+            default: "text"
+        },
         hints: [{
             name: String,
             data: String
