@@ -27,10 +27,33 @@ const mongoOptions = {
     useFindAndModify: false
 }
 
-mongoose.connect("mongodb://localhost:27017/cryptic", mongoOptions, (err) => {
-    if (err) { console.log(new Date(), err.message); }
-    else { console.log(new Date(), 'Database Connected.'); }
-})
+mongoose.connection.on('connecting', function () {
+    console.log(new Date(), 'Establishing Database Connection');
+});
+
+mongoose.connection.on('error', function (error) {
+    console.error(new Date(), 'Database Connection Error: ' + error.message);
+    mongoose.disconnect();
+});
+
+mongoose.connection.on('connected', function () {
+    console.log(new Date(), 'Database Connected');
+});
+
+mongoose.connection.once('open', function () {
+    console.log(new Date(), 'Database Connection Established');
+});
+
+mongoose.connection.on('reconnected', function () {
+    console.log(new Date(), 'Database ReConnected');
+});
+
+mongoose.connection.on('disconnected', function () {
+    console.log(new Date(), 'Database Disconnected');
+    mongoose.connect(process.env.MONGO_URI, mongoOptions);
+});
+
+mongoose.connect(process.env.MONGO_URI, mongoOptions);
 
 // V1 Backend Routes
 const routes = require('./routes');
