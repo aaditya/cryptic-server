@@ -29,7 +29,7 @@ const userModel = new Schema({
         level: [{
             last: Number,
             completedOn: Date,
-            questionCount: Number
+            question: []
         }],
         lastLogin: [{
             accessOn: Date,

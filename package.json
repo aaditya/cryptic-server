@@ -1,7 +1,7 @@
 {
   "name": "cryptic-server",
   "version": "1.0.0",
-  "description": "A scavenger hunt site project",
+  "description": "A scavenger hunt project",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

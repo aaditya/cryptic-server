@@ -24,7 +24,8 @@ const tokenVerificationHandler = async (req, res, next) => {
         req.info = {
             id: userData._id,
             access: userData.access,
-            email: userData.email
+            email: userData.email,
+            history: userData.history.level
         };
         next();
     } catch (err) {
