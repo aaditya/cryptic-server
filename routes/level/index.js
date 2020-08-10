@@ -18,4 +18,6 @@ router.post('/info', require('./addInfo'));
 
 router.put('/info', require('./editInfo'));
 
+router.delete('/info', require('./deleteInfo'));
+
 module.exports = router;

@@ -1,4 +1,4 @@
-const Level = require('../../models/levelInfo');
+const Question = require('../../models/questions');
 
 const addLevelHandler = async (req, res, next) => {
     try {
@@ -7,14 +7,14 @@ const addLevelHandler = async (req, res, next) => {
             return res.status(400).json({ "message": "Details invalid" });
         }
 
-        let levels = await Level.findOne({ level: levelNum });
+        let levels = await Question.findOne({ level: levelNum });
         if (levels) {
             return res.status(400).json({ "message": "Level Info already exists" });
         }
 
-        await new Level({
+        await new Question({
             level: levelNum,
-            questionCount: qCount
+            total: qCount
         }).save();
 
         return res.status(200).json({ "message": "Level Info Saved" });
