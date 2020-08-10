@@ -7,7 +7,7 @@ const { sendHTMLEMail } = require('../common/email');
 
 const registerUser = async (req, res, next) => {
     try {
-        let { email } = req.body;
+        let { email, type } = req.body;
         if (!email) {
             return res.status(400).json({
                 "message": "Required data not submitted."
@@ -28,14 +28,32 @@ const registerUser = async (req, res, next) => {
             })
         }
 
-        let activeUrl = `${req.protocol}://${req.get('host')}/activate?uid=${existingUser._id}&active=${activeKey}`;
+        let activeUrl = `${process.env.CB_URL}/activate?uid=${existingUser._id}&active=${activeKey}`;
 
         res.status(200).json({
             "message": "Email resent."
         });
 
-        const html = await renderHTML(path.join(__dirname, '../../templates/verification.ejs'), { url: activeUrl });
-        await sendHTMLEMail(email, 'Verify your Email Address to access Cryptix', html).catch();
+        if (type === "register") {
+            const html = await renderHTML(path.join(__dirname, '../../templates/mailer.ejs'), {
+                url: activeUrl,
+                subText: "Thanks for signing up !",
+                text1: "Please verify your email address to",
+                text2: "start with your hunt !",
+                btnText: "Verify Email"
+            });
+
+            await sendHTMLEMail(email, 'Verify your Email Address to access Cryptix', html).catch();
+        } else if (type === "forgot") {
+            const html = await renderHTML(path.join(__dirname, '../../templates/mailer.ejs'), {
+                url: activeUrl,
+                subText: "Reset Password",
+                text1: "Please click on the link to",
+                text2: "verify your email and restart your hunt !",
+                btnText: "Reset Password"
+            });
+            await sendHTMLEMail(email, 'Reset Password for your Cryptix Account', html).catch();
+        }
     } catch (err) {
         next(err);
     }

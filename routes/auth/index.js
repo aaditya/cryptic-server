@@ -16,4 +16,8 @@ router.post('/resend', require('./resend'));
 
 router.get('/verify', require('./verify'));
 
+router.post('/forgot', require('./forgot'));
+
+router.post('/set-password', require('./setPassword'));
+
 module.exports = router;

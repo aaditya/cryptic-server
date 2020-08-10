@@ -36,13 +36,20 @@ const registerUser = async (req, res, next) => {
             }
         }).save();
 
-        let activeUrl = `${req.protocol}://${req.get('host')}/activate?uid=${saveData._id}&active=${activeKey}`;
+        let activeUrl = `${process.env.CB_URL}/activate?uid=${saveData._id}&active=${activeKey}`;
 
         res.status(200).json({
             "message": "Registration completed."
         });
 
-        const html = await renderHTML(path.join(__dirname, '../../templates/verification.ejs'), { url: activeUrl });
+        const html = await renderHTML(path.join(__dirname, '../../templates/mailer.ejs'), { 
+            url: activeUrl, 
+            subText: "Thanks for signing up !",
+            text1: "Please verify your email address to",
+            text2: "start with your hunt !",
+            btnText: "Verify Email"
+        });
+
         await sendHTMLEMail(email, 'Verify your Email Address to access Cryptix', html).catch();
     } catch (err) {
         next(err);
