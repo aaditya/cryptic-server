@@ -21,7 +21,11 @@ const tokenVerificationHandler = async (req, res, next) => {
             return res.status(401).json({ "message": "Unauthorized Request" });
         }
 
-        req.info = info;
+        req.info = {
+            id: userData._id,
+            access: userData.access,
+            email: userData.email
+        };
         next();
     } catch (err) {
         next(err);

@@ -12,4 +12,7 @@ router.get('/status', (req, res) => {
 // Authentication APIs
 router.use('/auth', require('./auth'));
 
+// Level Info
+router.use('/level', require('./level'));
+
 module.exports = router;

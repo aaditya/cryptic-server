@@ -5,7 +5,7 @@ const User = require('../../models/user');
 
 const loginUser = async (req, res, next) => {
     try {
-        let payload = { userId: req.user._id, access: req.user.access === "user" ? 10 : 0 };
+        let payload = { userId: req.user._id };
         let token = jwt.sign(payload, process.env.SECRET_KEY);
         
         res.status(200).json({
