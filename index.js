@@ -59,6 +59,10 @@ mongoose.connect(process.env.MONGO_URI, mongoOptions);
 const routes = require('./routes');
 app.use('/api/v1', routes);
 
+app.use((req, res, next) => {
+    res.status(404).json({ "message": "Route does not exist" });
+})
+
 app.listen(port, () => {
     console.log(new Date(), `Server Running on port ${port}.`);
 });
