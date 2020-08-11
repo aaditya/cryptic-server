@@ -17,6 +17,7 @@ const userModel = new Schema({
     email: String,
     pwd: String,
     school: String,
+    createdAt: Date,
     activation: {
         key: String
     },

@@ -6,13 +6,17 @@ const handleVerify = async (req, res) => {
 
         const userData = await User.findOne({ _id: uid });
 
-        if (userData.activation.key !== active) {
-            return res.json({ "message": "Invalid Activation Code. " });
+        if (!userData) {
+            return res.json({ "message": "User does not exist" });
         }
 
-        await User.findOneAndUpdate({ _id: uid }, { $set: { status: 1 }, $unset: { activation: 1 } });
+        if (userData.activation.key !== active) {
+            return res.json({ "message": "Invalid Activation Code" });
+        }
 
-        return res.status(200).json({ "message": "Account Activated." });
+        await User.findOneAndUpdate({ _id: uid }, { $set: { status: 1, createdAt: new Date() }, $unset: { activation: 1 } });
+
+        return res.status(200).json({ "message": "Account Activated" });
     } catch (err) {
         next(err);
     }

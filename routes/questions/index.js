@@ -18,6 +18,8 @@ router.get('/play', require('./getNextQuestion'));
 
 router.post('/play', require('./playQuestion'));
 
+router.get('/leaderboard', require('./leaderboard'));
+
 router.use(adminCheck);
 
 router.get('/set', require('./getQuestion'));
