@@ -6,11 +6,12 @@ const User = require('../../models/user');
 const randStr = require('../common/rand');
 const renderHTML = require('../common/renderHTML');
 const { sendHTMLEMail } = require('../common/email');
+const verifyCaptcha = require('../common/recaptcha');
 
 const registerUser = async (req, res, next) => {
     try {
-        let { name, email, pwd, school } = req.body;
-        if (!name || !email || !pwd || !school) {
+        let { name, email, pwd, school, code, captchaKey } = req.body;
+        if (!name || !email || !pwd || !school || !code || !captchaKey) {
             return res.status(400).json({
                 "message": "Required data not submitted."
             });
@@ -20,6 +21,13 @@ const registerUser = async (req, res, next) => {
         if(existingUser) {
             return res.status(400).json({
                 "message": "User already exists."
+            });
+        }
+
+        let verifyCaptchaRes = await verifyCaptcha(captchaKey);
+        if (!verifyCaptchaRes) {
+            return res.status(400).json({
+                "message": "Invalid Captcha"
             });
         }
 

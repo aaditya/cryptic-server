@@ -16,7 +16,15 @@ const leaderbordHandler = async (req, res, next) => {
         let board = users.map((user) => {
             let latestLevel = user.history.level.slice(-1)[0];
 
-            let createdStamp = moment(user.createdAt);
+            if (!latestLevel) {
+                latestLevel = {
+                    question: [],
+                    last: 0,
+                    completedOn: new Date()
+                }
+            }
+
+            let createdStamp = moment(user.createdAt || new Date());
             let lastLevelStamp = moment(latestLevel.completedOn);
 
             // Time Spent from account creation to last level.

@@ -25,7 +25,7 @@ const forgotHandler = async (req, res) => {
         const activeKey = randStr({ limit: 11, special: false });
         await User.findOneAndUpdate({ _id: userData._id }, { $set: { status: 2, "activation.key": activeKey } });
 
-        let activeUrl = `${process.env.CB_URL}/activate?uid=${userData._id}&active=${activeKey}`;
+        let activeUrl = `${process.env.CB_URL}/forgot-password?uid=${userData._id}&active=${activeKey}`;
 
         res.status(200).json({
             "message": "Request Email Sent."

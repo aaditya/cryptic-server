@@ -28,13 +28,12 @@ const registerUser = async (req, res, next) => {
             })
         }
 
-        let activeUrl = `${process.env.CB_URL}/activate?uid=${existingUser._id}&active=${activeKey}`;
-
         res.status(200).json({
             "message": "Email resent."
         });
 
         if (type === "register") {
+            let activeUrl = `${process.env.CB_URL}/activate?uid=${existingUser._id}&active=${activeKey}`;
             const html = await renderHTML(path.join(__dirname, '../../templates/mailer.ejs'), {
                 url: activeUrl,
                 subText: "Thanks for signing up !",
@@ -45,6 +44,7 @@ const registerUser = async (req, res, next) => {
 
             await sendHTMLEMail(email, 'Verify your Email Address to access Cryptix', html).catch();
         } else if (type === "forgot") {
+            let activeUrl = `${process.env.CB_URL}/forgot-password?uid=${existingUser._id}&active=${activeKey}`;
             const html = await renderHTML(path.join(__dirname, '../../templates/mailer.ejs'), {
                 url: activeUrl,
                 subText: "Reset Password",
