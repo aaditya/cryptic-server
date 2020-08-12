@@ -45,6 +45,7 @@ const getQuestion = async (req, res, next) => {
                 qid: selected._id,
                 level: levelInfo.level,
                 question: selected.text,
+                type: selected.qType,
                 hints: selected.hints
             }
         });
