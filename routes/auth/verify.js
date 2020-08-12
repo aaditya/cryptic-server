@@ -1,6 +1,6 @@
 const User = require('../../models/user');
 
-const handleVerify = async (req, res) => {
+const handleVerify = async (req, res, next) => {
     try {
         let { uid, active } = req.query;
 
