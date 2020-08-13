@@ -21,6 +21,10 @@ const getQuestion = async (req, res, next) => {
             levelInfo = await Question.findOne({ level: start });
         }
 
+        if (!levelInfo) {
+            return res.status(404).json({ "message": "No questions found." })
+        }
+
         if (latestHistory && latestHistory.last > 1 && !levelInfo) {
             await User.findOneAndUpdate({ _id: req.info.id }, { $set: { status: 3 } });
             return res.status(200).json({ "message": "Hunt Completed. Congratulations !", end: true, data: {} });
