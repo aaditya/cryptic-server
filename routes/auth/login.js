@@ -7,10 +7,15 @@ const loginUser = async (req, res, next) => {
     try {
         let payload = { userId: req.user._id };
         let token = jwt.sign(payload, process.env.SECRET_KEY);
+
+        if (req.user.status === 3) {
+            return res.status(400).json({ "message": "Already Completed the Hunt !"});
+        }
         
         res.status(200).json({
             "message": "Authenticated",
-            "data": token
+            "data": token,
+            "frame": req.user.access === "user" ? null : true
         });
 
         // Logging

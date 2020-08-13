@@ -1,9 +1,10 @@
 const Question = require('../../models/questions');
+const User = require('../../models/user');
 
 const getQuestion = async (req, res, next) => {
     try {
         let { history } = req.info;
-        
+
         let start = 1;
         let qcount = 0;
 
@@ -14,14 +15,15 @@ const getQuestion = async (req, res, next) => {
             levelInfo = await Question.findOne({ level: latestHistory.last });
             qcount = latestHistory.question.length;
             if (qcount === levelInfo.total) {
-                levelInfo = await Question.findOne({ level: latestHistory.last + 1 });   
+                levelInfo = await Question.findOne({ level: latestHistory.last + 1 });
             }
         } else {
             levelInfo = await Question.findOne({ level: start });
         }
 
         if (latestHistory && latestHistory.last > 1 && !levelInfo) {
-            return res.status(200).json({ "message": "Hunt Completed. Congratulations !"});
+            await User.findOneAndUpdate({ _id: req.info.id }, { $set: { status: 3 } });
+            return res.status(200).json({ "message": "Hunt Completed. Congratulations !", end: true, data: {} });
         }
 
         let selected = levelInfo.questions.filter(q => {
@@ -35,7 +37,7 @@ const getQuestion = async (req, res, next) => {
         })[0];
 
         if (!selected) {
-            return res.status(200).json({ "message": "No further questions."});
+            return res.status(200).json({ "message": "No further questions.", data: {} });
         }
 
         return res.status(200).json({

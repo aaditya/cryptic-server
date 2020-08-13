@@ -11,16 +11,16 @@ module.exports = new LocalStrategy(
     },
     async function (username, password, done) {
         try {
-            const user = await User.findOne({ email: username });
-            if (!user || user.status < 1) {
+            const user = await User.findOne({ email: username, status: { $ne: -1 } });
+            if (!user) {
                 return done(null, false);
             }
-            
+
             let passChk = await bcrypt.compare(password, user.pwd);
             if (!passChk) {
                 return done(null, false);
             }
-            
+
             return done(null, user);
         } catch (err) {
             return done(err);

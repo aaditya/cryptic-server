@@ -4,7 +4,7 @@ const User = require('../../models/user');
 
 const leaderbordHandler = async (req, res, next) => {
     try {
-        let users = await User.find({ access: "user" });
+        let users = await User.find({ access: "user", status: { $ne: -1 } });
 
         /**
          * Leaderboard Sorting Priority
@@ -37,9 +37,10 @@ const leaderbordHandler = async (req, res, next) => {
                 school: user.school,
                 time: timeSpentHours,
                 level: latestLevel.last,
+                date: lastLevelStamp,
                 solved: latestLevel.question.length
             }
-        }).sort((a, b) => ((b.level - a.level) || (b.solved - a.solved) || (b.time - a.time)));
+        }).sort((a, b) => ((b.level - a.level) || (b.solved - a.solved) || (b.date - a.date) || (b.time - a.time)));
 
         return res.status(200).json({ "message": "Leaderboard", "data": board });
     } catch (err) {
