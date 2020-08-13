@@ -29,15 +29,15 @@ const leaderbordHandler = async (req, res, next) => {
 
             // Time Spent from account creation to last level.
             let timeSpent = moment.duration(lastLevelStamp.diff(createdStamp));
-            let timeSpentHours = timeSpent.asHours().toFixed(2);
+            let timeSpentMinutes = timeSpent.asMinutes().toFixed(2);
 
             return {
                 name: user.name,
                 email: user.email,
                 school: user.school,
-                time: timeSpentHours,
+                time: timeSpentMinutes,
                 level: latestLevel.last,
-                date: lastLevelStamp,
+                date: new Date(lastLevelStamp).getTime(),
                 solved: latestLevel.question.length
             }
         }).sort((a, b) => ((b.level - a.level) || (b.solved - a.solved) || (b.date - a.date) || (b.time - a.time)));
