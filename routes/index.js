@@ -18,9 +18,11 @@ router.use('/level', require('./level'));
 // Questions
 router.use('/questions', require('./questions'));
 
+// Users
+router.use('/users', require('./users'));
+
 router.use((err, req, res, next) => {
-    // Do something with this data
-    let data = JSON.stringify(err, null, 4);
+    console.log(err);
     res.status(500).json({ "message": "Server Error. Please Try Again" });
 });
 

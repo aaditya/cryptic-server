@@ -2,21 +2,13 @@ const User = require('../../models/user');
 
 const getUserHandler = async (req, res, next) => {
     try {
-        let { id, status } = req.body;
+        let { id } = req.body;
 
-        if (!id || !status) {
+        if (!id) {
             return res.status(400).json({ "message": "Details Invalid" });
         }
 
-        if (typeof status == "string") {
-            status = parseInt(status);
-        }
-
-        if (![-1, 1].includes(status)) {
-            return res.status(400).json({ "message": "Invalid Status" });
-        }
-
-        let users = await User.findOneAndUpdate({ _id: id }, { $set: { status }, $unset: { activation: 1 } });
+        let users = await User.findOneAndUpdate({ _id: id }, { $set: { access: "admin" } });
 
         if (!users) {
             return res.status(404).json({ "message": "No Users in system" })

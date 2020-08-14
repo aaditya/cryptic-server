@@ -17,6 +17,8 @@ router.use(adminCheck);
 
 router.get('/info', require('./getUsers'));
 
-router.post('/info', require('./disableUser'));
+router.post('/disable', require('./disableUser'));
+
+router.post('/grant', require('./grantAdmin'));
 
 module.exports = router;
