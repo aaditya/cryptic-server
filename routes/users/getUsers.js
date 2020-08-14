@@ -2,7 +2,7 @@ const User = require('../../models/user');
 
 const getUserHandler = async (req, res, next) => {
     try {
-        let users = await User.find({}, { pwd: 0 });
+        let users = await User.find({ _id: { $ne: req.info.id } }, { pwd: 0 });
 
         if (!users || users.length === 0) {
             return res.status(404).json({ "message": "No Users in system" })
