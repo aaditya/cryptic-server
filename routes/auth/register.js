@@ -11,7 +11,7 @@ const verifyCaptcha = require('../common/recaptcha');
 const registerUser = async (req, res, next) => {
     try {
         let { name, email, pwd, school, code, captchaKey } = req.body;
-        if (!name || !email || !pwd || !school || !code || !captchaKey) {
+        if (!name || !email || !pwd || !school || !captchaKey) {
             return res.status(400).json({
                 "message": "Required data not submitted."
             });
