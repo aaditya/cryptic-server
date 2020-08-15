@@ -1,4 +1,7 @@
+const fs = require('fs');
 const moment = require('moment');
+const path = require('path');
+const { Parser } = require('json2csv');
 
 const User = require('../../models/user');
 
@@ -32,18 +35,22 @@ const leaderbordHandler = async (req, res, next) => {
             let timeSpentMinutes = timeSpent.asMinutes().toFixed(2);
 
             return {
-                name: user.name,
-                email: user.email,
-                school: user.school,
-                time: timeSpentMinutes,
-                level: latestLevel.last,
-                completed: user.status === 3,
-                date: new Date(lastLevelStamp).getTime(),
-                solved: latestLevel.question.length
+                "Name": user.name,
+                "Email": user.email,
+                "School Name": user.school,
+                "Time Spent (Minutes)": timeSpentMinutes,
+                "Last Level Played": latestLevel.last,
+                "Hunt Completed": user.status === 3,
+                "Date of Last Level": new Date(lastLevelStamp).toDateString(),
+                "Questions Solved": latestLevel.question.length
             }
         }).sort((a, b) => ((b.level - a.level) || (b.solved - a.solved) || (b.date - a.date) || (b.time - a.time)));
 
-        return res.status(200).json({ "message": "Leaderboard", "data": board });
+        const parser = new Parser();
+        let csv = parser.parse(board);
+        let csvb = Buffer.from(csv);
+
+        res.attachment('leaderboard.csv').send(csvb);
     } catch (err) {
         next(err);
     }

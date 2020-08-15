@@ -22,6 +22,8 @@ router.get('/leaderboard', require('./leaderboard'));
 
 router.use(adminCheck);
 
+router.get('/leaderboard-csv', require('./leaderboardCsv'));
+
 router.get('/set', require('./getQuestion'));
 
 router.post('/set', require('./addQuestion'));

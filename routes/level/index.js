@@ -12,8 +12,6 @@ router.use((req, res, next) => {
     next();
 })
 
-router.get('/info', require('./getInfo'));
-
 router.post('/info', require('./addInfo'));
 
 router.put('/info', require('./editInfo'));

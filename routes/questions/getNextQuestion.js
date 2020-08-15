@@ -14,7 +14,7 @@ const getQuestion = async (req, res, next) => {
         if (latestHistory) {
             levelInfo = await Question.findOne({ level: latestHistory.last });
             qcount = latestHistory.question.length;
-            if (qcount === levelInfo.total) {
+            if (levelInfo && qcount === levelInfo.total) {
                 levelInfo = await Question.findOne({ level: latestHistory.last + 1 });
             }
         } else {
@@ -24,6 +24,10 @@ const getQuestion = async (req, res, next) => {
         if (latestHistory && latestHistory.last > 0 && !levelInfo) {
             await User.findOneAndUpdate({ _id: req.info.id }, { $set: { status: 3 } });
             return res.status(200).json({ "message": "Hunt Completed. Congratulations !", data: {} });
+        }
+
+        if (!levelInfo) {
+            return res.status(404).json({ "message": "No more questions" });
         }
 
         let selected = levelInfo.questions.filter(q => {
