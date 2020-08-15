@@ -22,7 +22,7 @@ const editQuestionHandler = async (req, res, next) => {
 
         let qObj = {
             text: question,
-            qtype: type,
+            qType: type,
             hints: hints.map(h => ({
                 name: h.name,
                 data: h.data
