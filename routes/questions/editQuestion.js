@@ -5,7 +5,7 @@ const Question = require('../../models/questions');
 const editQuestionHandler = async (req, res, next) => {
     try {
         let { levelId, qId, question, answer, hints, type } = req.body;
-        if (!levelId || !qId || !question || !answer || !type || !hints || hints.length === 0) {
+        if (!levelId || !qId || !question || !type || !hints || hints.length === 0) {
             return res.status(400).json({ "message": "Details invalid" });
         }
 
@@ -20,8 +20,6 @@ const editQuestionHandler = async (req, res, next) => {
             return res.status(400).json({ "message": "Question does not exist" });
         }
 
-        let ansHash = await bcrypt.hash(answer.toLowerCase(), 10);
-
         let qObj = {
             text: question,
             qtype: type,
@@ -29,7 +27,10 @@ const editQuestionHandler = async (req, res, next) => {
                 name: h.name,
                 data: h.data
             })),
-            answer: ansHash
+        }
+
+        if (answer) {
+            qObj.answer = await bcrypt.hash(answer.toLowerCase(), 10);
         }
 
         await Question.findOneAndUpdate({ _id: levelId, "questions._id": qId }, { $set: { "questions.$": qObj } });
