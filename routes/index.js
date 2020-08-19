@@ -23,7 +23,9 @@ router.use('/users', require('./users'));
 
 router.use((err, req, res, next) => {
     console.log(err);
-    res.status(500).json({ "message": "Server Error. Please Try Again" });
+    if (!res.headersSent) {
+        res.status(500).json({ "message": "Server Error. Please Try Again" });
+    }
 });
 
 module.exports = router;
