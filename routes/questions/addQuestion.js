@@ -5,7 +5,7 @@ const Question = require('../../models/questions');
 const addQuestionHandler = async (req, res, next) => {
     try {
         let { levelId, question, answer, hints, type } = req.body;
-        if (!levelId || !question || !answer || !type || !hints || hints.length === 0) {
+        if (!levelId || !question || !answer || !type) {
             return res.status(400).json({ "message": "Details invalid" });
         }
 
@@ -28,7 +28,7 @@ const addQuestionHandler = async (req, res, next) => {
         let qObj = {
             text: question,
             qtype: type,
-            hints: hints.map(h => ({
+            hints: hints && hints.map(h => ({
                 name: h.name,
                 data: h.data
             })),
