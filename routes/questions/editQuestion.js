@@ -5,7 +5,7 @@ const Question = require('../../models/questions');
 const editQuestionHandler = async (req, res, next) => {
     try {
         let { levelId, qId, question, answer, hints, type } = req.body;
-        if (!levelId || !qId || !question || !type || !hints || hints.length === 0) {
+        if (!levelId || !qId || !question || !type) {
             return res.status(400).json({ "message": "Details invalid" });
         }
 
@@ -13,7 +13,6 @@ const editQuestionHandler = async (req, res, next) => {
         if (!levelInfo) {
             return res.status(400).json({ "message": "Level info does not exist" });
         }
-
         
         let existinngQues = levelInfo.questions.find(q => q._id == qId);
         if (!existinngQues) {
@@ -21,12 +20,14 @@ const editQuestionHandler = async (req, res, next) => {
         }
 
         let qObj = {
+            _id: existinngQues._id,
             text: question,
             qType: type,
-            hints: hints.map(h => ({
+            hints: hints && hints.map(h => ({
                 name: h.name,
                 data: h.data
             })),
+            answer: existinngQues.answer
         }
 
         if (answer) {

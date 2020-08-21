@@ -27,7 +27,7 @@ const addQuestionHandler = async (req, res, next) => {
 
         let qObj = {
             text: question,
-            qtype: type,
+            qType: type,
             hints: hints && hints.map(h => ({
                 name: h.name,
                 data: h.data
