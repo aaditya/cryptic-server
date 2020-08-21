@@ -55,7 +55,7 @@ const registerUser = async (req, res, next) => {
         let activeUrl = `${process.env.CB_URL}/activate?uid=${saveData._id}&active=${activeKey}`;
 
         res.status(200).json({
-            "message": "Registration completed."
+            "message": "Please check your email for verification"
         });
 
         const html = await renderHTML(path.join(__dirname, '../../templates/mailer.ejs'), {
