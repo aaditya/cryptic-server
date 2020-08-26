@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 const path = require('path');
 
 const User = require('../../models/user');
-const Registration = require('../../models/registration');
 
 const randStr = require('../common/rand');
 const renderHTML = require('../common/renderHTML');
@@ -11,8 +10,8 @@ const verifyCaptcha = require('../common/recaptcha');
 
 const registerUser = async (req, res, next) => {
     try {
-        let { name, email, pwd, school, code, captchaKey } = req.body;
-        if (!name || !email || !pwd || !school || !captchaKey || !code) {
+        let { name, email, pwd, school, captchaKey } = req.body;
+        if (!name || !email || !pwd || !school || !captchaKey) {
             return res.status(400).json({
                 "message": "Required data not submitted."
             });
@@ -29,13 +28,6 @@ const registerUser = async (req, res, next) => {
         if (!verifyCaptchaRes) {
             return res.status(400).json({
                 "message": "Invalid Captcha"
-            });
-        }
-
-        let verifyCode = await Registration.findOne({ code });
-        if (!verifyCode || verifyCode.used) {
-            return res.status(400).json({
-                "message": "Invalid Invite Code"
             });
         }
 
@@ -65,8 +57,6 @@ const registerUser = async (req, res, next) => {
             text2: "start with your hunt !",
             btnText: "Verify Email"
         });
-
-        await Registration.findOneAndUpdate({ code }, { $set: { used: true } });
 
         await sendHTMLEMail(email, 'Verify your Email Address to access Cryptix', html).catch();
     } catch (err) {
