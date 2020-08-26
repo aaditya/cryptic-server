@@ -21,4 +21,8 @@ router.post('/disable', require('./disableUser'));
 
 router.post('/grant', require('./grantAdmin'));
 
+router.get('/kill', require('./getKillswitch'));
+
+router.post('/kill', require('./setKillswitch'));
+
 module.exports = router;
