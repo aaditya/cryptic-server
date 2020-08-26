@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
+const moment = require('moment');
 
+const Killswitch = require('../../models/killswitch');
 const Question = require('../../models/questions');
 const User = require('../../models/user');
 
@@ -8,6 +10,11 @@ const playQuestion = async (req, res, next) => {
         let { levelId, qId, answer } = req.body;
         if (!levelId, !qId, !answer) {
             return res.status(400).json({ "message": "Details Invalid" })
+        }
+
+        let killdate = await Killswitch.findOne({ role: 'main' });
+        if (moment().isAfter(moment(killdate.activateOn))) {
+            return res.status(400).json({ "message": "Hunt has been closed" });
         }
 
         let levelInfo = await Question.findOne({ _id: levelId });
