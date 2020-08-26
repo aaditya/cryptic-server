@@ -1,3 +1,6 @@
+const moment = require('moment');
+
+const Killswitch = require('../../models/killswitch');
 const Question = require('../../models/questions');
 const User = require('../../models/user');
 
@@ -10,6 +13,11 @@ const getQuestion = async (req, res, next) => {
 
         let levelInfo;
         let latestHistory = history.slice(-1)[0];
+
+        let killdate = await Killswitch.findOne({ role: 'main' });
+        if (moment().isAfter(moment(killdate.activateOn))) {
+            return res.status(200).json({ "message": "Hunt Completed.", data: {} });
+        }
 
         if (latestHistory) {
             levelInfo = await Question.findOne({ level: latestHistory.last });
