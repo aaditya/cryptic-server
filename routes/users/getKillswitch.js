@@ -7,7 +7,9 @@ const getSwitchController = async (req, res, next) => {
             return res.status(200).json({ "message": "Killswitch", data: null });
         }
 
-        return res.status(200).json({ "message": "Killswitch", data: kill.activateOn });
+        let { scheduledOn, activateOn } = kill;
+
+        return res.status(200).json({ "message": "Killswitch", data: { scheduledOn, activateOn } });
     } catch (err) {
         next(err);
     }

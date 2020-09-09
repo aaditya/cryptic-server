@@ -13,7 +13,7 @@ const playQuestion = async (req, res, next) => {
         }
 
         let killdate = await Killswitch.findOne({ role: 'main' });
-        if (moment().isAfter(moment(killdate.activateOn))) {
+        if (moment().isAfter(moment(killdate.activateOn)) || moment().isBefore(moment(killdate.scheduledOn))) {
             return res.status(400).json({ "message": "Hunt has been closed" });
         }
 
