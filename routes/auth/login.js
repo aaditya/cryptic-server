@@ -14,6 +14,8 @@ const loginUser = async (req, res, next) => {
             "frame": req.user.access === "user" ? null : true
         });
 
+        console.log(JSON.stringify(req.headers));
+
         // Logging
         if (req.user.access === "user") {
             let accessHistory = {
