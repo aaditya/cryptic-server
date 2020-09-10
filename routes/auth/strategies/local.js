@@ -11,7 +11,7 @@ module.exports = new LocalStrategy(
     },
     async function (username, password, done) {
         try {
-            const user = await User.findOne({ email: username, status: { $ne: -1 } });
+            const user = await User.findOne({ email: username, status: { $nin: [-1, 0] } });
             if (!user) {
                 return done(null, false);
             }
