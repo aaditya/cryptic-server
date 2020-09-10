@@ -18,7 +18,7 @@ const loginUser = async (req, res, next) => {
         if (req.user.access === "user") {
             let accessHistory = {
                 accessOn: new Date,
-                from: req.connection.remoteAddress.split(':')[3],
+                from: req.headers['client-ip'] || req.connection.remoteAddress.split(':')[3],
                 agent: req.useragent.source
             }
             await User.findOneAndUpdate({ _id: req.user._id }, { $push: { "history.lastLogin": accessHistory } }).catch();
