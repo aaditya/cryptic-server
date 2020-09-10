@@ -1,11 +1,11 @@
 const bcrypt = require('bcrypt');
-const path = require('path');
+// const path = require('path');
 
 const User = require('../../models/user');
 
 const randStr = require('../common/rand');
-const renderHTML = require('../common/renderHTML');
-const { sendHTMLEMail } = require('../common/email');
+// const renderHTML = require('../common/renderHTML');
+// const { sendHTMLEMail } = require('../common/email');
 const verifyCaptcha = require('../common/recaptcha');
 
 const registerUser = async (req, res, next) => {
@@ -44,21 +44,21 @@ const registerUser = async (req, res, next) => {
             }
         }).save();
 
-        let activeUrl = `${process.env.CB_URL}/activate?uid=${saveData._id}&active=${activeKey}`;
+        // let activeUrl = `${process.env.CB_URL}/activate?uid=${saveData._id}&active=${activeKey}`;
 
         res.status(200).json({
             "message": "Please check your email for verification"
         });
 
-        const html = await renderHTML(path.join(__dirname, '../../templates/mailer.ejs'), {
-            url: activeUrl,
-            subText: "Thanks for signing up !",
-            text1: "Please verify your email address to",
-            text2: "start with your hunt !",
-            btnText: "Verify Email"
-        });
+        // const html = await renderHTML(path.join(__dirname, '../../templates/mailer.ejs'), {
+        //     url: activeUrl,
+        //     subText: "Thanks for signing up !",
+        //     text1: "Please verify your email address to",
+        //     text2: "start with your hunt !",
+        //     btnText: "Verify Email"
+        // });
 
-        await sendHTMLEMail(email, 'Verify your Email Address to access Cryptix', html).catch();
+        // await sendHTMLEMail(email, 'Verify your Email Address to access Cryptix', html).catch();
     } catch (err) {
         next(err);
     }
