@@ -14,13 +14,11 @@ const loginUser = async (req, res, next) => {
             "frame": req.user.access === "user" ? null : true
         });
 
-        console.log(JSON.stringify(req.headers));
-
         // Logging
         if (req.user.access === "user") {
             let accessHistory = {
                 accessOn: new Date,
-                from: req.headers['client-ip'] || req.connection.remoteAddress.split(':')[3],
+                from: req.headers['x-forwarded-for'] || req.connection.remoteAddress.split(':')[3],
                 agent: req.useragent.source
             }
             await User.findOneAndUpdate({ _id: req.user._id }, { $push: { "history.lastLogin": accessHistory } }).catch();
