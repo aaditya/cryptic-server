@@ -29,7 +29,7 @@ const leaderbordHandler = async (req, res, next) => {
             let lastLevelStamp = moment(latestLevel.completedOn);
 
             // Time Spent from account creation to last level.
-            let timeSpent = moment.duration(lastLevelStamp.diff(createdStamp));
+            let timeSpent = moment.duration(createdStamp.diff(lastLevelStamp));
             let timeSpentMinutes = timeSpent.asMinutes().toFixed(2);
 
             return {
