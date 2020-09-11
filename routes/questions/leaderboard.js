@@ -34,6 +34,7 @@ const leaderbordHandler = async (req, res, next) => {
             return {
                 name: user.name,
                 email: user.email,
+                self: user.email === req.info.email,
                 school: user.school,
                 time: timeSpentMinutes,
                 level: latestLevel.last,

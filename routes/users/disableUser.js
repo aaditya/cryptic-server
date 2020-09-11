@@ -12,10 +12,6 @@ const getUserHandler = async (req, res, next) => {
             status = parseInt(status);
         }
 
-        if (![-1, 1].includes(status)) {
-            return res.status(400).json({ "message": "Invalid Status" });
-        }
-
         let users = await User.findOneAndUpdate({ _id: id }, { $set: { status }, $unset: { activation: 1 } });
 
         if (!users) {
