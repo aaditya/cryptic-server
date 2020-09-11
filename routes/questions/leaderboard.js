@@ -28,9 +28,9 @@ const leaderbordHandler = async (req, res, next) => {
             let lastLevelStamp = moment(latestLevel.completedOn);
 
             // Time Spent from account creation to last level.
-            let timeSpent = moment.duration(lastLevelStamp.diff(createdStamp));
+            let timeSpent = moment.duration(createdStamp.diff(lastLevelStamp));
             let timeSpentMinutes = timeSpent.asMinutes().toFixed(2);
-
+            
             return {
                 name: user.name,
                 email: user.email,
@@ -42,7 +42,7 @@ const leaderbordHandler = async (req, res, next) => {
                 date: new Date(lastLevelStamp).getTime(),
                 solved: latestLevel.question.length
             }
-        }).sort((a, b) => ((b.level > a.level) || (b.solved > a.solved) || (b.date < a.date) || (b.time < a.time)));
+        }).sort((a, b) => ((b.level - a.level) || (b.solved - a.solved) || (a.date - b.date) || (a.time - b.time)));
 
         return res.status(200).json({ "message": "Leaderboard", "data": board });
     } catch (err) {

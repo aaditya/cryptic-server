@@ -42,7 +42,7 @@ const leaderbordHandler = async (req, res, next) => {
                 "Date of Last Level": new Date(lastLevelStamp).toDateString(),
                 "Questions Solved": latestLevel.question.length
             }
-        }).sort((a, b) => ((b.level > a.level) || (b.solved > a.solved) || (b.date < a.date) || (b.time < a.time)));
+        }).sort((a, b) => ((b.level - a.level) || (b.solved - a.solved) || (a.date - b.date) || (a.time - b.time)));
 
         const parser = new Parser();
         let csv = parser.parse(board);
