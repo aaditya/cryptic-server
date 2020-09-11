@@ -42,7 +42,7 @@ const leaderbordHandler = async (req, res, next) => {
                 date: new Date(lastLevelStamp).getTime(),
                 solved: latestLevel.question.length
             }
-        }).sort((a, b) => ((b.level - a.level) || (b.solved - a.solved) || (a.date - b.date) || (a.time - b.time)));
+        }).sort((a, b) => ((b.level - a.level) || (a.date - b.date) || (a.time - b.time)));
 
         return res.status(200).json({ "message": "Leaderboard", "data": board });
     } catch (err) {
